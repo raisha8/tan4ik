@@ -9,18 +9,11 @@ display_height = 600
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 
-#fire_sound = pygame.mixer.Sound("1.mp3")
-#explosion_sound = pygame.mixer.Sound("1.mp3")
 
-#pygame.mixer.music.load("1.mp3")
-#pygame.mixer.music.play(-1)
+pygame.display.set_caption('Tanks')
 
 
-pygame.display.set_caption('Tanks - Amar')
 
-icon = pygame.image.load("ic.jpg")
-pygame.display.set_icon(icon)
-#----------------------------------------colors----------------------------------------------
 wheat=(245,222,179)
 
 white = (255, 255, 255)
@@ -36,9 +29,8 @@ light_yellow = (255, 255, 0)
 green = (34, 177, 76)
 light_green = (0, 255, 0)
 
-#--------------------------------for picking current time for the frames per second----------------------
+
 clock = pygame.time.Clock()
-#--------------------------------geometry of tank and its turret------------------------------------------
 tankWidth = 40
 tankHeight = 20
 
@@ -46,18 +38,15 @@ turretWidth = 5
 wheelWidth = 5
 
 ground_height = 35
-#--------------------------------------------fonts with size, for text_object function----------------
 smallfont = pygame.font.SysFont("comicsansms", 25)
 medfont = pygame.font.SysFont("comicsansms", 50)
 largefont = pygame.font.SysFont("Yu Mincho Demibold", 85)
 vsmallfont = pygame.font.SysFont("Yu Mincho Demibold", 25)
 
-#--------------------------------------------defining score function----------------------------------
 def score(score):
     text = smallfont.render("Score: " + str(score), True, white)
     gameDisplay.blit(text, [0, 0])
 
-#---defining function to get the fonts and sizes assigned with them by size names by default size="small"--
 def text_objects(text, color, size="small"):
     if size == "small":
         textSurface = smallfont.render(text, True, color)
@@ -70,19 +59,16 @@ def text_objects(text, color, size="small"):
 
     return textSurface, textSurface.get_rect()
 
-#---------------------fuction for texts that has to appear over button----------------------------------------
 def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size="vsmall"):
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = ((buttonx + (buttonwidth / 2)), buttony + (buttonheight / 2))
     gameDisplay.blit(textSurf, textRect)
 
-#--------------------fuction for texts that has to appear over screen----------------------------------------
 def message_to_screen(msg, color, y_displace=0, size="small"):
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = (int(display_width / 2), int(display_height / 2) + y_displace)
     gameDisplay.blit(textSurf, textRect)
 
-#----------------------fuction for players tank , defining turrets positins and wheels dimensions------------
 def tank(x, y, turPos):
     x = int(x)
     y = int(y)
@@ -116,7 +102,6 @@ def tank(x, y, turPos):
 
     return possibleTurrets[turPos]
 
-#----------------------fuction for computers tank , defining turrets positins and wheels dimensions------------
 def enemy_tank(x, y, turPos):
     x = int(x)
     y = int(y)
@@ -132,85 +117,68 @@ def enemy_tank(x, y, turPos):
                        (x + 11, y - 21)
                        ]
 
-    pygame.draw.circle(gameDisplay, blue, (x, y), int(tankHeight / 2))
-    pygame.draw.rect(gameDisplay, blue, (x - tankHeight, y, tankWidth, tankHeight))
+    pygame.draw.circle(gameDisplay, red, (x, y), int(tankHeight / 2))
+    pygame.draw.rect(gameDisplay, red, (x - tankHeight, y, tankWidth, tankHeight))
 
-    pygame.draw.line(gameDisplay, blue, (x, y), possibleTurrets[turPos], turretWidth)
+    pygame.draw.line(gameDisplay, red, (x, y), possibleTurrets[turPos], turretWidth)
 
-    pygame.draw.circle(gameDisplay, blue, (x - 15, y + 20), wheelWidth)
-    pygame.draw.circle(gameDisplay, blue, (x - 10, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x - 15, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x - 10, y + 20), wheelWidth)
 
-    pygame.draw.circle(gameDisplay, blue, (x - 15, y + 20), wheelWidth)
-    pygame.draw.circle(gameDisplay, blue, (x - 10, y + 20), wheelWidth)
-    pygame.draw.circle(gameDisplay, blue, (x - 5, y + 20), wheelWidth)
-    pygame.draw.circle(gameDisplay, blue, (x, y + 20), wheelWidth)
-    pygame.draw.circle(gameDisplay, blue, (x + 5, y + 20), wheelWidth)
-    pygame.draw.circle(gameDisplay, blue, (x + 10, y + 20), wheelWidth)
-    pygame.draw.circle(gameDisplay, blue, (x + 15, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x - 15, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x - 10, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x - 5, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x + 5, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x + 10, y + 20), wheelWidth)
+    pygame.draw.circle(gameDisplay, red, (x + 15, y + 20), wheelWidth)
 
     return possibleTurrets[turPos]
 
-#-----------------------------------------Game control Screen------------------------------------------------
 def game_controls():
     gcont = True
 
     while gcont:
         for event in pygame.event.get():
-            # print(event)
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
 
         gameDisplay.fill(black)
-        message_to_screen("Controls", white, -100, size="large")
-        message_to_screen("Fire: Spacebar", wheat, -30)
-        message_to_screen("Move Turret: Up and Down arrows", wheat, 10)
-        message_to_screen("Move Tank: Left and Right arrows", wheat, 50)
-        message_to_screen("Press D to raise Power % AND Press A to lower Power % ", wheat, 140)
-        message_to_screen("Pause: P", wheat, 90)
+
 
         button("Play", 150, 500, 100, 50, green, light_green, action="play")
-        button("Main", 350, 500, 100, 50, yellow, light_yellow, action="main")
-        button("Quit", 550, 500, 100, 50, red, light_red, action="quit")
+
 
         pygame.display.update()
 
         clock.tick(15)
 
-#--------------function for buttons having action calls and text on it callings---------------------------
 def button(text, x, y, width, height, inactive_color, active_color, action=None,size=" "):
     cur = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
-    # print(click)
+
     if x + width > cur[0] > x and y + height > cur[1] > y:
         pygame.draw.rect(gameDisplay, active_color, (x, y, width, height))
         if click[0] == 1 and action != None:
-            if action == "quit":
-                pygame.quit()
-                quit()
 
-            if action == "controls":
-                game_controls()
 
             if action == "play":
                 gameLoop()
 
-            if action == "main":
-                game_intro()
 
     else:
         pygame.draw.rect(gameDisplay, inactive_color, (x, y, width, height))
 
     text_to_button(text, black, x, y, width, height)
 
-#---function for pause having transparent background, uncommenting fill statement will make it black-----
 def pause():
     paused = True
     message_to_screen("Paused", white, -100, size="large")
     message_to_screen("Press C to continue playing or Q to quit", wheat, 25)
     pygame.display.update()
     while paused:
-        #gameDisplay.fill(black)
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -225,13 +193,10 @@ def pause():
 
         clock.tick(5)
 
-#----------------------------function for barrior-------------------------------------------------------
 def barrier(xlocation, randomHeight, barrier_width):
     pygame.draw.rect(gameDisplay, green, [xlocation, display_height - randomHeight, barrier_width, randomHeight])
 
-#---------------------------function for explosion for both tanks---------------------------------------
 def explosion(x, y, size=50):
-    #pygame.mixer.Sound.play(explosion_sound)
     explode = True
 
     while explode:
@@ -259,9 +224,7 @@ def explosion(x, y, size=50):
 
         explode = False
 
-#--------------------------------firing function for players tank-------------------------------------------
 def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, randomHeight, enemyTankX, enemyTankY):
-    #pygame.mixer.Sound.play(fire_sound)
     fire = True
     damage = 0
 
@@ -275,12 +238,11 @@ def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, ran
                 pygame.quit()
                 quit()
 
-        # print(startingShell[0],startingShell[1])
         pygame.draw.circle(gameDisplay, red, (startingShell[0], startingShell[1]), 5)
 
         startingShell[0] -= (12 - turPos) * 2
 
-        # y = x**2
+
         startingShell[1] += int(
             (((startingShell[0] - xy[0]) * 0.015 / (gun_power / 50)) ** 2) - (turPos + turPos / (12 - turPos)))
 
@@ -324,9 +286,7 @@ def fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, ran
         clock.tick(60)
     return damage
 
-#--------------------------------firing function for computer's tank-------------------------------------------
 def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, randomHeight, ptankx, ptanky):
-    #pygame.mixer.Sound.play(fire_sound)
     damage = 0
     currentPower = 1
     power_found = False
@@ -335,7 +295,6 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
         currentPower += 1
         if currentPower > 100:
             power_found = True
-        # print(currentPower)
 
         fire = True
         startingShell = list(xy)
@@ -346,7 +305,6 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
                     pygame.quit()
                     quit()
 
-            # pygame.draw.circle(gameDisplay, red, (startingShell[0],startingShell[1]),5)
 
             startingShell[0] += (12 - turPos) * 2
             startingShell[1] += int(
@@ -355,7 +313,6 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
             if startingShell[1] > display_height - ground_height:
                 hit_x = int((startingShell[0] * display_height - ground_height) / startingShell[1])
                 hit_y = int(display_height - ground_height)
-                # explosion(hit_x,hit_y)
                 if ptankx + 15 > hit_x > ptankx - 15:
                     print("target acquired!")
                     power_found = True
@@ -370,12 +327,11 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
             if check_x_1 and check_x_2 and check_y_1 and check_y_2:
                 hit_x = int((startingShell[0]))
                 hit_y = int(startingShell[1])
-                # explosion(hit_x,hit_y)
                 fire = False
 
     fire = True
     startingShell = list(xy)
-    print("FIRE!", xy)
+    print("FIRE123!", xy)
 
     while fire:
         for event in pygame.event.get():
@@ -383,12 +339,10 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
                 pygame.quit()
                 quit()
 
-        # print(startingShell[0],startingShell[1])
         pygame.draw.circle(gameDisplay, red, (startingShell[0], startingShell[1]), 5)
 
         startingShell[0] += (12 - turPos) * 2
 
-        # y = x**2
 
         gun_power = random.randrange(int(currentPower * 0.90), int(currentPower * 1.10))
 
@@ -435,18 +389,15 @@ def e_fireShell(xy, tankx, tanky, turPos, gun_power, xlocation, barrier_width, r
         clock.tick(60)
     return damage
 
-#--------------------------- function for power level of players tank-------------------------------------
 def power(level):
     text = smallfont.render("Power: " + str(level) + "%", True, wheat)
     gameDisplay.blit(text, [display_width / 2, 0])
 
-#---------------------------function for intro screen------------------------------------------------------
 def game_intro():
     intro = True
 
     while intro:
         for event in pygame.event.get():
-            # print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
@@ -461,28 +412,25 @@ def game_intro():
 
         gameDisplay.fill(black)
         message_to_screen("Welcome to Tanks!", white, -100, size="large")
-        message_to_screen("The objective is to shoot and destroy", wheat, 15)
-        message_to_screen("the enemy tank before they destroy you.", wheat, 60)
-        message_to_screen("The more enemies you destroy, the harder they get.", wheat, 110)
-        message_to_screen("Created by :- Amar Kumar", wheat, 280)
-        # message_to_screen("Press C to play, P to pause or Q to quit",black,180)
+#        message_to_screen("The objective is to shoot and destroy", wheat, 15)
+#        message_to_screen("the enemy tank before they destroy you.", wheat, 60)
+#        message_to_screen("The more enemies you destroy, the harder they get.", wheat, 110)
+#        message_to_screen("Created by :- Amar Kumar", wheat, 280)
 
 
-        button("Play", 150, 500, 100, 50, wheat, light_green, action="play",size="vsmall")
-        button("Controls", 350, 500, 100, 50, wheat, light_yellow, action="controls",size="vsmall")
-        button("Quit", 550, 500, 100, 50, wheat, light_red, action="quit",size="vsmall")
+        button("Игра", 150, 500, 100, 50, wheat, light_green, action="play",size="vsmall")
+        button("Красный", 350, 500, 100, 50, wheat, light_red, action="code",size="vsmall")
+        button("Синий", 550, 500, 100, 50, wheat, light_yellow, action="code1",size="vsmall")
 
         pygame.display.update()
 
         clock.tick(15)
 
-#---------------------------function for game Over screen------------------------------------------------------
 def game_over():
     game_over = True
 
     while game_over:
         for event in pygame.event.get():
-            # print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
@@ -492,20 +440,18 @@ def game_over():
         message_to_screen("You died.", wheat, -30)
 
         button("Play Again", 150, 500, 150, 50, wheat, light_green, action="play")
-        button("Controls", 350, 500, 100, 50, wheat, light_yellow, action="controls")
-        button("Quit", 550, 500, 100, 50, wheat, light_red, action="quit")
+        # button("Controls", 350, 500, 100, 50, wheat, light_yellow, action="controls")
+        # button("Quit", 550, 500, 100, 50, wheat, light_red, action="quit")
 
         pygame.display.update()
 
         clock.tick(15)
 
-#---------------------------function for players win screen--------------------------------------------------
 def you_win():
     win = True
 
     while win:
         for event in pygame.event.get():
-            # print(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
@@ -515,14 +461,13 @@ def you_win():
         message_to_screen("Congratulations!", wheat, -30)
 
         button("play Again", 150, 500, 150, 50, wheat, light_green, action="play")
-        button("controls", 350, 500, 100, 50, wheat, light_yellow, action="controls")
-        button("quit", 550, 500, 100, 50, wheat, light_red, action="quit")
+#        button("controls", 350, 500, 100, 50, wheat, light_yellow, action="controls")
+#        button("quit", 550, 500, 100, 50, wheat, light_red, action="quit")
 
         pygame.display.update()
 
         clock.tick(15)
 
-#---------------------------function for health bars of both tanks---------------------------------------
 def health_bars(player_health, enemy_health):
     if player_health > 75:
         player_health_color = green
@@ -541,7 +486,6 @@ def health_bars(player_health, enemy_health):
     pygame.draw.rect(gameDisplay, player_health_color, (680, 25, player_health, 25))
     pygame.draw.rect(gameDisplay, enemy_health_color, (20, 25, enemy_health, 25))
 
-#---------------------------function for main gameloop----------------------------------------------------
 def gameLoop():
     gameExit = False
     gameOver = False
@@ -565,14 +509,14 @@ def gameLoop():
     power_change = 0
 
     xlocation = (display_width / 2) + random.randint(-0.1 * display_width, 0.1 * display_width)
-    randomHeight = random.randrange(display_height * 0.1, display_height * 0.6)
+
+    randomHeight = 0.5
 
     while not gameExit:
 
         if gameOver == True:
-            # gameDisplay.fill(white)
             message_to_screen("Game Over", red, -50, size="large")
-            message_to_screen("Press C to play again or Q to exit", black, 50)
+
             pygame.display.update()
             while gameOver == True:
                 for event in pygame.event.get():
